@@ -36,7 +36,7 @@ async def ws_to_tts(speaker_queue, lang='zh-tw'):
     tts = gTTS(sentence, lang=lang, lang_check=False)
     led.set_state(led.ON)
     with tempfile.TemporaryFile() as tempf:
-        tts.write_to_fp(tempf)
+        tts.write_to_fp(tempf
         tempf.seek(0)
         logger.info('Speaking...')
         simple_player.play_bytes(tempf)
@@ -47,7 +47,7 @@ async def ws_to_tts(speaker_queue, lang='zh-tw'):
 async def record_to_buffer(ws_queue):
     logger.info('Recording from microphone.')
     retcode = await simple_recorder.record_wav(ws_queue)
-    logger.info('Recording is finished.')
+    logger.info('Recording is finished ooo.')
     logger.info('Calling ASR service')
     return retcode
 
@@ -88,7 +88,17 @@ async def handle_websocket(ws_queue, speaker_queue):
                     continue
                 if body['pipe'].get('asr_eof', False):
                     break
-            return sentences[-1] if len(sentences) > 0 else '蛤'
+            if len(sentences) > 0
+                import requests
+                url = 'https://evening-depths-93109.herokuapp.com/'
+                logger.info('backWord', sentences[-1])
+                intentData = sentences[-1]
+                response = requests.post(url, data=intentData)
+                response.encoding = 'big5-hkscs'
+                return response;
+            else
+                return '蛤'
+            # return sentences[-1] if len(sentences) > 0 else '蛤'
 
         asyncio.ensure_future(wait_for_queue())
         out = await asyncio.ensure_future(wait_for_ws())
